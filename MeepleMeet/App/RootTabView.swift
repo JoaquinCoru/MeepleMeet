@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct RootTabView: View {
+    @Environment(GamesVM.self) private var gamesViewModel
     @State private var selectedTab: AppTab = .inicio
 
     var body: some View {
@@ -11,9 +12,8 @@ struct RootTabView: View {
             .tabItem { Label(AppTab.inicio.title, systemImage: AppTab.inicio.symbol) }
             .tag(AppTab.inicio)
 
-            NavigationStack {
-                GamesView()
-            }
+            GamesView()
+                .environment(gamesViewModel)
             .tabItem { Label(AppTab.juegos.title, systemImage: AppTab.juegos.symbol) }
             .tag(AppTab.juegos)
 
@@ -38,8 +38,6 @@ struct RootTabView: View {
     }
 }
 
-struct RootTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        RootTabView()
-    }
+#Preview(traits: .gamesSampleData) {
+    RootTabView()
 }

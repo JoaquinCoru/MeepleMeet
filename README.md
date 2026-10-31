@@ -2,7 +2,7 @@
 
 Aplicación nativa en **SwiftUI** para MeepleMeet, una plataforma social para descubrir juegos de mesa, gestionar una ludoteca y organizar quedadas para jugar.
 
-> **Estado: proyecto base.** La aplicación incluye la estructura inicial y la navegación principal. Las pantallas todavía están vacías y aún no se conecta con la API.
+> **Estado: base de interfaz.** La aplicación incluye la navegación principal y el componente de fila del catálogo de juegos. La carga de datos desde la API todavía no está conectada.
 
 ## Resumen
 
@@ -15,7 +15,8 @@ El proyecto está planteado como contraparte del servidor `MeepleMeetAPI`, desar
 - [x] Crear el proyecto Xcode `MeepleMeet`.
 - [x] Añadir las pestañas Inicio, Juegos, Quedadas, Ludoteca y Perfil.
 - [x] Separar cada pantalla en su propio archivo SwiftUI.
-- [x] Configurar una preview para la navegación principal.
+- [x] Crear el componente de fila de juego y un modelo `Decodable` para el catálogo.
+- [x] Añadir `GamesVM` y una preview del catálogo con `sampleData`.
 - [x] Compilar la app para iOS Simulator.
 - [ ] Definir el diseño visual de las pantallas.
 - [ ] Crear modelos de presentación y conectar el catálogo con MeepleMeet API.
@@ -65,7 +66,15 @@ MeepleMeet/
     │   ├── AppTab.swift         # Identidad, título e icono de cada pestaña
     │   ├── MeepleMeet.swift  # Punto de entrada
     │   └── RootTabView.swift    # Navegación principal
+    ├── Models/
+    │   └── GameCatalogItem.swift # Modelo decodificable del catálogo
+    ├── PreviewData/
+    │   └── GamesSampleData.swift # Datos de muestra para previews
+    ├── ViewModels/
+    │   └── GamesVM.swift        # Estado del catálogo de juegos
     └── Views/
+        ├── GameDetailView.swift
+        ├── GameListItemView.swift
         ├── GameLibraryView.swift
         ├── GamesView.swift
         ├── HomeView.swift
@@ -83,4 +92,4 @@ MeepleMeet/
 
 ## Alcance de esta base
 
-Las vistas muestran únicamente un estado vacío con el nombre de cada sección. No hay datos de muestra, llamadas de red, almacenamiento local, autenticación ni funcionalidades de negocio implementadas todavía.
+La pestaña Juegos presenta el estado vacío hasta recibir elementos; su fila de catálogo está preparada para usar datos decodificados del backend y se muestra con datos de ejemplo solo en la preview. La carga de red, almacenamiento local, autenticación y otras funcionalidades de negocio todavía no están implementadas.
