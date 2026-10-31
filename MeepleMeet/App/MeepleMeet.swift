@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct MeepleMeetApp: App {
+struct MeepleMeet: App {
     var body: some Scene {
         WindowGroup {
             RootTabView()
