@@ -3,49 +3,24 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 71;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B10000000000000000000001 /* MeepleMeet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000001 /* MeepleMeet.swift */; };
-		B10000000000000000000002 /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000002 /* AppTab.swift */; };
-		B10000000000000000000003 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000003 /* RootTabView.swift */; };
-		B10000000000000000000004 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000004 /* HomeView.swift */; };
-		B10000000000000000000005 /* GamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000005 /* GamesView.swift */; };
-		B10000000000000000000006 /* MeetupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000006 /* MeetupsView.swift */; };
-		B10000000000000000000007 /* GameLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000007 /* GameLibraryView.swift */; };
-		B10000000000000000000008 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000008 /* ProfileView.swift */; };
-		B10000000000000000000009 /* GameCatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000010 /* GameCatalogItem.swift */; };
-		B10000000000000000000010 /* GameListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000011 /* GameListItemView.swift */; };
-		B10000000000000000000011 /* GamesVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000012 /* GamesVM.swift */; };
-		B10000000000000000000012 /* GamesSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000013 /* GamesSampleData.swift */; };
-		B10000000000000000000013 /* GameDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000014 /* GameDetailView.swift */; };
-		B10000000000000000000014 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000015 /* URL.swift */; };
-		B10000000000000000000015 /* RepositoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000016 /* RepositoryData.swift */; };
-		B10000000000000000000017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000018 /* Assets.xcassets */; };
 		D2234B3C3096058600463114 /* Mastery26 in Frameworks */ = {isa = PBXBuildFile; productRef = D2234B3B3096058600463114 /* Mastery26 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C10000000000000000000001 /* MeepleMeet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeepleMeet.swift; sourceTree = "<group>"; };
-		C10000000000000000000002 /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
-		C10000000000000000000003 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
-		C10000000000000000000004 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		C10000000000000000000005 /* GamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesView.swift; sourceTree = "<group>"; };
-		C10000000000000000000006 /* MeetupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetupsView.swift; sourceTree = "<group>"; };
-		C10000000000000000000007 /* GameLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLibraryView.swift; sourceTree = "<group>"; };
-		C10000000000000000000008 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		C10000000000000000000009 /* MeepleMeet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeepleMeet.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C10000000000000000000010 /* GameCatalogItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCatalogItem.swift; sourceTree = "<group>"; };
-		C10000000000000000000011 /* GameListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListItemView.swift; sourceTree = "<group>"; };
-		C10000000000000000000012 /* GamesVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesVM.swift; sourceTree = "<group>"; };
-		C10000000000000000000013 /* GamesSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesSampleData.swift; sourceTree = "<group>"; };
-		C10000000000000000000014 /* GameDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailView.swift; sourceTree = "<group>"; };
-		C10000000000000000000015 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
-		C10000000000000000000016 /* RepositoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryData.swift; sourceTree = "<group>"; };
-		C10000000000000000000018 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D2DCB66630961DF5007FA098 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E10000000000000000000002 /* MeepleMeet */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MeepleMeet;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D10000000000000000000001 /* Frameworks */ = {
@@ -67,92 +42,12 @@
 			);
 			sourceTree = "<group>";
 		};
-		E10000000000000000000002 /* MeepleMeet */ = {
-			isa = PBXGroup;
-			children = (
-				D2DCB66630961DF5007FA098 /* Info.plist */,
-				E10000000000000000000004 /* App */,
-				E10000000000000000000005 /* Views */,
-				E10000000000000000000006 /* Models */,
-				E10000000000000000000007 /* ViewModels */,
-				E10000000000000000000008 /* PreviewData */,
-				E10000000000000000000009 /* Interface */,
-				E1000000000000000000000A /* Repository */,
-				C10000000000000000000018 /* Assets.xcassets */,
-			);
-			path = MeepleMeet;
-			sourceTree = "<group>";
-		};
 		E10000000000000000000003 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				C10000000000000000000009 /* MeepleMeet.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E10000000000000000000004 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				C10000000000000000000001 /* MeepleMeet.swift */,
-				C10000000000000000000002 /* AppTab.swift */,
-				C10000000000000000000003 /* RootTabView.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		E10000000000000000000005 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				C10000000000000000000004 /* HomeView.swift */,
-				C10000000000000000000005 /* GamesView.swift */,
-				C10000000000000000000006 /* MeetupsView.swift */,
-				C10000000000000000000007 /* GameLibraryView.swift */,
-				C10000000000000000000008 /* ProfileView.swift */,
-				C10000000000000000000011 /* GameListItemView.swift */,
-				C10000000000000000000014 /* GameDetailView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		E10000000000000000000006 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				C10000000000000000000010 /* GameCatalogItem.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		E10000000000000000000007 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				C10000000000000000000012 /* GamesVM.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		E10000000000000000000008 /* PreviewData */ = {
-			isa = PBXGroup;
-			children = (
-				C10000000000000000000013 /* GamesSampleData.swift */,
-			);
-			path = PreviewData;
-			sourceTree = "<group>";
-		};
-		E10000000000000000000009 /* Interface */ = {
-			isa = PBXGroup;
-			children = (
-				C10000000000000000000015 /* URL.swift */,
-			);
-			path = Interface;
-			sourceTree = "<group>";
-		};
-		E1000000000000000000000A /* Repository */ = {
-			isa = PBXGroup;
-			children = (
-				C10000000000000000000016 /* RepositoryData.swift */,
-			);
-			path = Repository;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,6 +64,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E10000000000000000000002 /* MeepleMeet */,
 			);
 			name = MeepleMeet;
 			packageProductDependencies = (
@@ -203,6 +101,7 @@
 				Base,
 			);
 			mainGroup = E10000000000000000000001;
+			preferredProjectObjectVersion = 77;
 			packageReferences = (
 				D2234B3A3096058600463114 /* XCLocalSwiftPackageReference "Mastery26" */,
 			);
@@ -220,7 +119,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B10000000000000000000017 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,21 +129,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B10000000000000000000001 /* MeepleMeet.swift in Sources */,
-				B10000000000000000000002 /* AppTab.swift in Sources */,
-				B10000000000000000000003 /* RootTabView.swift in Sources */,
-				B10000000000000000000004 /* HomeView.swift in Sources */,
-				B10000000000000000000005 /* GamesView.swift in Sources */,
-				B10000000000000000000006 /* MeetupsView.swift in Sources */,
-				B10000000000000000000007 /* GameLibraryView.swift in Sources */,
-				B10000000000000000000008 /* ProfileView.swift in Sources */,
-				B10000000000000000000009 /* GameCatalogItem.swift in Sources */,
-				B10000000000000000000010 /* GameListItemView.swift in Sources */,
-				B10000000000000000000011 /* GamesVM.swift in Sources */,
-				B10000000000000000000012 /* GamesSampleData.swift in Sources */,
-				B10000000000000000000013 /* GameDetailView.swift in Sources */,
-				B10000000000000000000014 /* URL.swift in Sources */,
-				B10000000000000000000015 /* RepositoryData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -4,6 +4,8 @@ import Foundation
 struct GameCatalogItem: Decodable, Hashable, Identifiable, Sendable {
     let id: UUID
     let title: String
+    let description: String?
+    let rulesURL: URL?
     let category: String?
     let minPlayers: Int?
     let maxPlayers: Int?
@@ -17,6 +19,8 @@ struct GameCatalogItem: Decodable, Hashable, Identifiable, Sendable {
     enum CodingKeys: String, CodingKey {
         case id
         case title
+        case description
+        case rulesURL
         case category
         case minPlayers
         case maxPlayers
@@ -31,6 +35,8 @@ struct GameCatalogItem: Decodable, Hashable, Identifiable, Sendable {
     init(
         id: UUID,
         title: String,
+        description: String? = nil,
+        rulesURL: URL? = nil,
         category: String? = nil,
         minPlayers: Int? = nil,
         maxPlayers: Int? = nil,
@@ -43,6 +49,8 @@ struct GameCatalogItem: Decodable, Hashable, Identifiable, Sendable {
     ) {
         self.id = id
         self.title = title
+        self.description = description
+        self.rulesURL = rulesURL
         self.category = category
         self.minPlayers = minPlayers
         self.maxPlayers = maxPlayers

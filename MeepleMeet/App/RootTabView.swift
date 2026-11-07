@@ -12,8 +12,10 @@ struct RootTabView: View {
             .tabItem { Label(AppTab.inicio.title, systemImage: AppTab.inicio.symbol) }
             .tag(AppTab.inicio)
 
-            GamesView()
-                .environment(gamesViewModel)
+            GamesView {
+                selectedTab = .quedadas
+            }
+            .environment(gamesViewModel)
             .tabItem { Label(AppTab.juegos.title, systemImage: AppTab.juegos.symbol) }
             .tag(AppTab.juegos)
 

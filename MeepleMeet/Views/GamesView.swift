@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct GamesView: View {
+    var onSearchMeetups: () -> Void = {}
     @Environment(GamesVM.self) private var viewModel
     @State private var path: [GameCatalogItem] = []
 
@@ -42,7 +43,7 @@ struct GamesView: View {
                         .background(Color(uiColor: .systemGroupedBackground))
                         .navigationTitle("Juegos")
                         .navigationDestination(for: GameCatalogItem.self) { game in
-                            GameDetailView(game: game)
+                            GameDetailView(game: game, onSearchMeetups: onSearchMeetups)
                         }
                     }
                 }
