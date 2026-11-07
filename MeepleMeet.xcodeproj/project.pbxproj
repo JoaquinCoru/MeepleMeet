@@ -20,6 +20,10 @@
 		B10000000000000000000011 /* GamesVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000012 /* GamesVM.swift */; };
 		B10000000000000000000012 /* GamesSampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000013 /* GamesSampleData.swift */; };
 		B10000000000000000000013 /* GameDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000014 /* GameDetailView.swift */; };
+		B10000000000000000000014 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000015 /* URL.swift */; };
+		B10000000000000000000015 /* RepositoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000016 /* RepositoryData.swift */; };
+		B10000000000000000000017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000000000018 /* Assets.xcassets */; };
+		D2234B3C3096058600463114 /* Mastery26 in Frameworks */ = {isa = PBXBuildFile; productRef = D2234B3B3096058600463114 /* Mastery26 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +41,10 @@
 		C10000000000000000000012 /* GamesVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesVM.swift; sourceTree = "<group>"; };
 		C10000000000000000000013 /* GamesSampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesSampleData.swift; sourceTree = "<group>"; };
 		C10000000000000000000014 /* GameDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailView.swift; sourceTree = "<group>"; };
+		C10000000000000000000015 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		C10000000000000000000016 /* RepositoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryData.swift; sourceTree = "<group>"; };
+		C10000000000000000000018 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D2DCB66630961DF5007FA098 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2234B3C3096058600463114 /* Mastery26 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,11 +70,15 @@
 		E10000000000000000000002 /* MeepleMeet */ = {
 			isa = PBXGroup;
 			children = (
+				D2DCB66630961DF5007FA098 /* Info.plist */,
 				E10000000000000000000004 /* App */,
 				E10000000000000000000005 /* Views */,
 				E10000000000000000000006 /* Models */,
 				E10000000000000000000007 /* ViewModels */,
 				E10000000000000000000008 /* PreviewData */,
+				E10000000000000000000009 /* Interface */,
+				E1000000000000000000000A /* Repository */,
+				C10000000000000000000018 /* Assets.xcassets */,
 			);
 			path = MeepleMeet;
 			sourceTree = "<group>";
@@ -126,6 +139,22 @@
 			path = PreviewData;
 			sourceTree = "<group>";
 		};
+		E10000000000000000000009 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				C10000000000000000000015 /* URL.swift */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		E1000000000000000000000A /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				C10000000000000000000016 /* RepositoryData.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -142,6 +171,9 @@
 			dependencies = (
 			);
 			name = MeepleMeet;
+			packageProductDependencies = (
+				D2234B3B3096058600463114 /* Mastery26 */,
+			);
 			productName = MeepleMeet;
 			productReference = C10000000000000000000009 /* MeepleMeet.app */;
 			productType = "com.apple.product-type.application";
@@ -171,6 +203,9 @@
 				Base,
 			);
 			mainGroup = E10000000000000000000001;
+			packageReferences = (
+				D2234B3A3096058600463114 /* XCLocalSwiftPackageReference "Mastery26" */,
+			);
 			productRefGroup = E10000000000000000000003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -185,6 +220,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B10000000000000000000017 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,6 +244,8 @@
 				B10000000000000000000011 /* GamesVM.swift in Sources */,
 				B10000000000000000000012 /* GamesSampleData.swift in Sources */,
 				B10000000000000000000013 /* GameDetailView.swift in Sources */,
+				B10000000000000000000014 /* URL.swift in Sources */,
+				B10000000000000000000015 /* RepositoryData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,12 +280,14 @@
 		F10000000000000000000005 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MeepleMeet/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MeepleMeet;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = es.meeplemeet.app;
@@ -264,12 +304,13 @@
 		F10000000000000000000006 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MeepleMeet/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MeepleMeet;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = es.meeplemeet.app;
@@ -304,6 +345,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		D2234B3A3096058600463114 /* XCLocalSwiftPackageReference "Mastery26" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Mastery26;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D2234B3B3096058600463114 /* Mastery26 */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Mastery26;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A10000000000000000000002 /* Project object */;
 }

@@ -2,13 +2,13 @@
 
 Aplicación nativa en **SwiftUI** para MeepleMeet, una plataforma social para descubrir juegos de mesa, gestionar una ludoteca y organizar quedadas para jugar.
 
-> **Estado: base de interfaz.** La aplicación incluye la navegación principal y el componente de fila del catálogo de juegos. La carga de datos desde la API todavía no está conectada.
+> **Estado: catálogo conectado.** La aplicación incluye navegación, una lista de juegos con estado de carga y la primera integración de red con MeepleMeet API.
 
 ## Resumen
 
 MeepleMeet es el cliente iOS del proyecto final del Swift Mastery Program. La primera versión establece el punto de entrada de la aplicación, una barra de pestañas con las cinco áreas principales y una vista independiente para cada sección. Cada pestaña tiene su propio `NavigationStack`, preparada para añadir navegación interna a medida que crezcan las funcionalidades.
 
-El proyecto está planteado como contraparte del servidor `MeepleMeetAPI`, desarrollado con Vapor en un directorio hermano. La comunicación entre ambos todavía no está implementada.
+El cliente consume el endpoint público de catálogo `GET /api/v1/games` del servidor `MeepleMeetAPI`, desarrollado con Vapor en un directorio hermano.
 
 ## Estado actual
 
@@ -17,9 +17,10 @@ El proyecto está planteado como contraparte del servidor `MeepleMeetAPI`, desar
 - [x] Separar cada pantalla en su propio archivo SwiftUI.
 - [x] Crear el componente de fila de juego y un modelo `Decodable` para el catálogo.
 - [x] Añadir `GamesVM` y una preview del catálogo con `sampleData`.
+- [x] Cargar el catálogo desde MeepleMeet API mediante `Mastery26`.
 - [x] Compilar la app para iOS Simulator.
 - [ ] Definir el diseño visual de las pantallas.
-- [ ] Crear modelos de presentación y conectar el catálogo con MeepleMeet API.
+- [ ] Completar los campos de categoría, duración y número de usuarios propietarios en el contrato del backend.
 - [ ] Añadir ludoteca personal, quedadas y perfil de usuario.
 - [ ] Incorporar persistencia, autenticación y pruebas.
 
@@ -28,19 +29,22 @@ El proyecto está planteado como contraparte del servidor `MeepleMeetAPI`, desar
 - Swift 6 language mode con concurrencia estricta
 - SwiftUI
 - Xcode 26.6
-- iOS 17 o posterior
+- iOS 26 o posterior (requisito de la versión actual de Mastery26)
 - Swift Package Manager para futuras dependencias
+- Mastery26 como paquete local para las peticiones HTTP
 
-La base actual no incorpora dependencias externas ni persistencia local.
+El cliente usa un paquete local propio y no incorpora dependencias de terceros. Todavía no hay persistencia local.
 
 ## Requisitos
 
 - macOS con Xcode 26.6 o posterior.
-- Un destino de iOS 17 o posterior, físico o de simulador.
+- Un destino de iOS 26 o posterior, físico o de simulador.
 
 ## Abrir y ejecutar
 
 Abre `MeepleMeet.xcodeproj` en Xcode, selecciona el esquema **MeepleMeet** y ejecuta la aplicación en un simulador o dispositivo iOS.
+
+Para cargar juegos, arranca `MeepleMeetAPI` en el Mac con `swift run`. En desarrollo, el cliente solicita `http://localhost:8080/api/v1/games`.
 
 También puedes compilar desde Terminal:
 
@@ -68,10 +72,14 @@ MeepleMeet/
     │   └── RootTabView.swift    # Navegación principal
     ├── Models/
     │   └── GameCatalogItem.swift # Modelo decodificable del catálogo
+    ├── Interface/
+    │   └── APIEndpoint.swift    # URL de la API
     ├── PreviewData/
     │   └── GamesSampleData.swift # Datos de muestra para previews
     ├── ViewModels/
     │   └── GamesVM.swift        # Estado del catálogo de juegos
+    ├── Repository/
+    │   └── RepositoryData.swift # Acceso a red con Mastery26
     └── Views/
         ├── GameDetailView.swift
         ├── GameListItemView.swift
@@ -92,4 +100,4 @@ MeepleMeet/
 
 ## Alcance de esta base
 
-La pestaña Juegos presenta el estado vacío hasta recibir elementos; su fila de catálogo está preparada para usar datos decodificados del backend y se muestra con datos de ejemplo solo en la preview. La carga de red, almacenamiento local, autenticación y otras funcionalidades de negocio todavía no están implementadas.
+La pestaña Juegos descarga el catálogo al mostrarse por primera vez y ofrece reintentar si falla. Los datos de preview son locales y no activan la petición. La API actual no proporciona categoría ni cantidad de propietarios; esos campos se muestran cuando el backend los incluya. Persistencia, autenticación y otras funcionalidades de negocio siguen pendientes.

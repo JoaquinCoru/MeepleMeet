@@ -8,7 +8,22 @@ struct GamesView: View {
 
             Group {
                 if viewModel.games.isEmpty {
-                    ContentUnavailableView("Juegos", systemImage: "die.face.5")
+                    if viewModel.isLoading {
+                        ProgressView("Cargando juegos…")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if let errorMessage = viewModel.errorMessage {
+                        ContentUnavailableView {
+                            Label("No se pudieron cargar los juegos", systemImage: "wifi.exclamationmark")
+                        } description: {
+                            Text(errorMessage)
+                        } actions: {
+                            Button("Reintentar") {
+                                Task { await viewModel.loadGames() }
+                            }
+                        }
+                    } else {
+                        ContentUnavailableView("No hay juegos", systemImage: "die.face.5")
+                    }
                 } else {
                     NavigationStack(path: $path) {
                         List(viewModel.games) { game in
@@ -31,6 +46,9 @@ struct GamesView: View {
                         }
                     }
                 }
+            }
+            .task {
+                await viewModel.loadGames()
             }
     }
 }
