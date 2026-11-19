@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 71;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,12 +14,18 @@
 		C10000000000000000000009 /* MeepleMeet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeepleMeet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		E10000000000000000000002 /* MeepleMeet */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MeepleMeet;
-			sourceTree = "<group>";
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E10000000000000000000004 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A10000000000000000000001 /* MeepleMeet */;
 		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E10000000000000000000002 /* MeepleMeet */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E10000000000000000000004 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = MeepleMeet; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,7 +107,6 @@
 				Base,
 			);
 			mainGroup = E10000000000000000000001;
-			preferredProjectObjectVersion = 77;
 			packageReferences = (
 				D2234B3A3096058600463114 /* XCLocalSwiftPackageReference "Mastery26" */,
 			);
