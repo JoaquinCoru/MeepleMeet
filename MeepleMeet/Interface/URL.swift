@@ -8,4 +8,10 @@ extension URL {
     static let getGames = api
         .appending(path: "v1")
         .appending(path: "games")
+
+    /// POST /api/v1/auth/login
+    static let login = api
+        .appending(path: "v1")
+        .appending(path: "auth")
+        .appending(path: "login")
 }

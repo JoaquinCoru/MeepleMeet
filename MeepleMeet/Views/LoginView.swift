@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    @Environment(AuthVM.self) private var authViewModel
     private enum Field: Hashable {
         case displayName
         case email
@@ -135,12 +136,29 @@ struct LoginView: View {
                 .padding(.top, -8)
             }
 
+            if let errorMessage = authViewModel.errorMessage {
+                Text(errorMessage)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+            }
+
             Button {
-                showingComingSoon = true
+                guard !isCreatingAccount else {
+                    showingComingSoon = true
+                    return
+                }
+                focusedField = nil
+                Task {
+                    await authViewModel.login(email: email, password: password)
+                }
             } label: {
                 HStack(spacing: 9) {
-                    Text(isCreatingAccount ? "Crear cuenta" : "Iniciar sesión")
-                    Image(systemName: "arrow.right")
+                    if authViewModel.isLoading && !isCreatingAccount {
+                        ProgressView().tint(.white)
+                    } else {
+                        Text(isCreatingAccount ? "Crear cuenta" : "Iniciar sesión")
+                        Image(systemName: "arrow.right")
+                    }
                 }
                 .font(.headline)
                 .foregroundStyle(.white)
@@ -149,6 +167,8 @@ struct LoginView: View {
                 .background(accent, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
             .buttonStyle(.plain)
+            .disabled(authViewModel.isLoading || (!isCreatingAccount && (email.isEmpty || password.isEmpty)))
+            .opacity(authViewModel.isLoading ? 0.75 : 1)
             .padding(.top, 2)
 
             HStack(spacing: 5) {

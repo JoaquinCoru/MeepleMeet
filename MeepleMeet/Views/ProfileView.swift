@@ -1,36 +1,22 @@
 import SwiftUI
 
-enum ProfileAuthenticationState {
-    case loggedOut
-    case loggedIn
-}
-
 struct ProfileView: View {
-    @State private var authenticationState: ProfileAuthenticationState
-
-    init(initialState: ProfileAuthenticationState = .loggedOut) {
-        _authenticationState = State(initialValue: initialState)
-    }
+    @Environment(AuthVM.self) private var authViewModel
 
     var body: some View {
         Group {
-            switch authenticationState {
-            case .loggedOut:
+            if let user = authViewModel.user {
+                loggedInProfile(user: user)
+            } else {
                 LoginView()
-            case .loggedIn:
-                loggedInProfilePlaceholder
             }
         }
         .navigationTitle("Perfil")
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    private var loggedInProfilePlaceholder: some View {
-        ContentUnavailableView(
-            "Tu perfil",
-            systemImage: "person.crop.circle",
-            description: Text("Aquí aparecerá tu perfil cuando iniciemos sesión.")
-        )
+    private func loggedInProfile(user: AuthenticatedUser) -> some View {
+        ContentUnavailableView("¡Hola, \(user.name)!", systemImage: "person.crop.circle", description: Text(user.email))
     }
 }
 
@@ -40,8 +26,3 @@ struct ProfileView: View {
     }
 }
 
-#Preview("Con sesión") {
-    NavigationStack {
-        ProfileView(initialState: .loggedIn)
-    }
-}
