@@ -26,6 +26,23 @@ final class AuthVM {
         }
     }
 
+    func register(name: String, email: String, password: String) async -> Bool {
+        guard !isLoading else { return false }
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            try await Repository().register(
+                name: name.trimmingCharacters(in: .whitespacesAndNewlines),
+                email: email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
+                password: password
+            )
+            return true
+        } catch {
+            return false
+        }
+    }
+
     func clearError() {
         errorMessage = nil
     }

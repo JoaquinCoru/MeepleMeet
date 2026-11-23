@@ -14,6 +14,7 @@ struct LoginView: View {
     @State private var password = ""
     @State private var isPasswordVisible = false
     @State private var showingComingSoon = false
+    @State private var registrationAlert: RegistrationAlert?
     @FocusState private var focusedField: Field?
 
     private let accent = Color(red: 0.02, green: 0.59, blue: 0.28)
@@ -41,7 +42,14 @@ struct LoginView: View {
         .alert("Muy pronto", isPresented: $showingComingSoon) {
             Button("Entendido", role: .cancel) { }
         } message: {
-            Text("La autenticación estará disponible cuando conectemos la app con el servicio de usuarios.")
+            Text("La recuperación de contraseña estará disponible próximamente.")
+        }
+        .alert(item: $registrationAlert) { alert in
+            Alert(
+                title: Text(alert.title),
+                message: Text(alert.message),
+                dismissButton: .default(Text("Entendido"))
+            )
         }
     }
 
@@ -143,17 +151,24 @@ struct LoginView: View {
             }
 
             Button {
-                guard !isCreatingAccount else {
-                    showingComingSoon = true
-                    return
-                }
                 focusedField = nil
                 Task {
-                    await authViewModel.login(email: email, password: password)
+                    if isCreatingAccount {
+                        let succeeded = await authViewModel.register(
+                            name: displayName,
+                            email: email,
+                            password: password
+                        )
+                        registrationAlert = succeeded
+                            ? RegistrationAlert(title: "Cuenta creada", message: "Tu cuenta se ha creado correctamente. Ya puedes iniciar sesión.")
+                            : RegistrationAlert(title: "No se pudo crear la cuenta", message: "Comprueba los datos. Es posible que el correo ya esté registrado o que la contraseña tenga menos de 8 caracteres.")
+                    } else {
+                        await authViewModel.login(email: email, password: password)
+                    }
                 }
             } label: {
                 HStack(spacing: 9) {
-                    if authViewModel.isLoading && !isCreatingAccount {
+                    if authViewModel.isLoading {
                         ProgressView().tint(.white)
                     } else {
                         Text(isCreatingAccount ? "Crear cuenta" : "Iniciar sesión")
@@ -167,7 +182,9 @@ struct LoginView: View {
                 .background(accent, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
             .buttonStyle(.plain)
-            .disabled(authViewModel.isLoading || (!isCreatingAccount && (email.isEmpty || password.isEmpty)))
+            .disabled(authViewModel.isLoading || (isCreatingAccount
+                ? !canRegister
+                : email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || password.isEmpty))
             .opacity(authViewModel.isLoading ? 0.75 : 1)
             .padding(.top, 2)
 
@@ -195,6 +212,12 @@ struct LoginView: View {
                 .stroke(Color(uiColor: .separator).opacity(0.22), lineWidth: 1)
         }
         .shadow(color: .black.opacity(0.04), radius: 18, y: 8)
+    }
+
+    private var canRegister: Bool {
+        !displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !password.isEmpty
     }
 
     private func inputField<Field: View>(
@@ -236,6 +259,12 @@ struct LoginView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 8)
     }
+}
+
+private struct RegistrationAlert: Identifiable {
+    let id = UUID()
+    let title: String
+    let message: String
 }
 
 #Preview {

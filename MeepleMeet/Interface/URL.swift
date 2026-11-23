@@ -14,4 +14,10 @@ extension URL {
         .appending(path: "v1")
         .appending(path: "auth")
         .appending(path: "login")
+
+    /// POST /api/v1/auth/register
+    static let register = api
+        .appending(path: "v1")
+        .appending(path: "auth")
+        .appending(path: "register")
 }

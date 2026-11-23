@@ -10,3 +10,9 @@ struct AuthenticatedUser: Decodable, Sendable, Identifiable {
     let name: String
     let email: String
 }
+
+struct RegisterRequest: Encodable, Sendable {
+    let name: String
+    let email: String
+    let password: String
+}

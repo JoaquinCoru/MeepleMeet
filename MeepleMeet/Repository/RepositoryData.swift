@@ -20,11 +20,17 @@ struct Repository: RepositoryData {
         authToken = Data(response.token.utf8)
         return response
     }
+
+    func register(name: String, email: String, password: String) async throws {
+        let request = RegisterRequest(name: name, email: email, password: password)
+        try await getStatus(.request(.post, url: .register, body: request), status: 201)
+    }
 }
 
 protocol RepositoryData: NetworkInteractor, Sendable {
     var authToken: Data? { get set }
     func getGames() async throws -> [GameCatalogItem]
+    func register(name: String, email: String, password: String) async throws
 }
 
 extension RepositoryData {
