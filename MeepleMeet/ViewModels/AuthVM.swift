@@ -46,6 +46,12 @@ final class AuthVM {
         }
     }
 
+    func invalidateSession() async {
+        var security = Security()
+        await security.clearAuthToken()
+        state = .notAuthenticated
+    }
+
     func login(email: String, password: String) async {
         guard !isLoading else { return }
         isLoading = true

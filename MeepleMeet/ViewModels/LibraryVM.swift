@@ -32,4 +32,22 @@ final class LibraryVM {
         games.removeAll { $0.id == game.id }
         state = .loaded(games)
     }
+
+    func addToLibrary(_ game: GameCatalogItem) async throws {
+        try await Repository().addToCollection(gameID: game.id)
+        markAsInLibrary(game)
+    }
+
+    func markAsInLibrary(_ game: GameCatalogItem) {
+        switch state {
+        case .loaded(var games):
+            guard !games.contains(where: { $0.id == game.id }) else { return }
+            games.append(game)
+            state = .loaded(games)
+        case .failed(_):
+            state = .idle
+        case .idle, .loading:
+            break
+        }
+    }
 }

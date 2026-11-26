@@ -14,9 +14,11 @@ struct RootTabView: View {
             .tabItem { Label(AppTab.inicio.title, systemImage: AppTab.inicio.symbol) }
             .tag(AppTab.inicio)
 
-            GamesView {
+            GamesView(onSearchMeetups: {
                 selectedTab = .quedadas
-            }
+            }, onRequestLogin: {
+                selectedTab = .perfil
+            })
             .environment(gamesViewModel)
             .tabItem { Label(AppTab.juegos.title, systemImage: AppTab.juegos.symbol) }
             .tag(AppTab.juegos)

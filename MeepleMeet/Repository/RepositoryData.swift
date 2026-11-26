@@ -13,6 +13,7 @@ protocol RepositoryData: NetworkInteractor, Sendable {
     var jwtToken: Data? { get }
     func getGames() async throws -> [GameCatalogItem]
     func getCollection() async throws -> [GameCatalogItem]
+    func addToCollection(gameID: UUID) async throws
 }
 
 extension RepositoryData {
@@ -27,6 +28,13 @@ extension RepositoryData {
         try await getJSON(
             .request(url: .getCollection, token: jwt),
             type: [GameCatalogItem].self
+        )
+    }
+
+    func addToCollection(gameID: UUID) async throws {
+        try await getStatus(
+            .request(.post, url: .addToCollection(gameID: gameID), token: jwt),
+            status: 201
         )
     }
 

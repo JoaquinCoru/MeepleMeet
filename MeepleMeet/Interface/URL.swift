@@ -12,6 +12,13 @@ extension URL {
     static let getCollection = api
         .appending(path: "collection")
 
+    /// POST /api/v1/collection/:gameID
+    static func addToCollection(gameID: UUID) -> URL {
+        api
+            .appending(path: "collection")
+            .appending(path: gameID.uuidString)
+    }
+
     /// POST /api/v1/auth/login
     static let login = api
         .appending(path: "auth")

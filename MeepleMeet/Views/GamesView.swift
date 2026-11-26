@@ -2,6 +2,7 @@ import SwiftUI
 
 struct GamesView: View {
     var onSearchMeetups: () -> Void = {}
+    var onRequestLogin: () -> Void = {}
     @Environment(GamesVM.self) private var viewModel
     @State private var path: [GameCatalogItem] = []
 
@@ -43,7 +44,11 @@ struct GamesView: View {
             }
             .navigationTitle("Juegos")
             .navigationDestination(for: GameCatalogItem.self) { game in
-                GameDetailView(game: game, onSearchMeetups: onSearchMeetups)
+                GameDetailView(
+                    game: game,
+                    onSearchMeetups: onSearchMeetups,
+                    onRequestLogin: onRequestLogin
+                )
             }
         }
         .task {

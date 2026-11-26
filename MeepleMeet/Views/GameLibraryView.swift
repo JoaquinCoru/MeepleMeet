@@ -28,7 +28,11 @@ struct GameLibraryView: View {
             .background(Color(uiColor: .systemGroupedBackground))
             .navigationBarHidden(true)
             .navigationDestination(for: GameCatalogItem.self) { game in
-                GameDetailView(game: game, onSearchMeetups: onSearchMeetups)
+                GameDetailView(
+                    game: game,
+                    onSearchMeetups: onSearchMeetups,
+                    onRequestLogin: onRequestLogin
+                )
             }
             .alert("¿Eliminar juego?", isPresented: deletionAlertIsPresented) {
                 Button("Cancelar", role: .cancel) {
