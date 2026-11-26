@@ -31,6 +31,8 @@ struct RootTabView: View {
                     selectedTab = .juegos
                 } onSearchMeetups: {
                     selectedTab = .quedadas
+                } onRequestLogin: {
+                    selectedTab = .perfil
                 }
                 .environment(libraryViewModel)
             }

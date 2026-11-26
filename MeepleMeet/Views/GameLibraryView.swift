@@ -3,78 +3,21 @@ import SwiftUI
 struct GameLibraryView: View {
     var onExploreGames: () -> Void = {}
     var onSearchMeetups: () -> Void = {}
+    var onRequestLogin: () -> Void = {}
+    @Environment(AuthVM.self) private var authViewModel
     @Environment(LibraryVM.self) private var viewModel
     @State private var path: [GameCatalogItem] = []
     @State private var gamePendingDeletion: GameCatalogItem?
 
     var body: some View {
         NavigationStack(path: $path) {
-            List {
-                Section {
-                    VStack(alignment: .leading, spacing: 16) {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("Mi ludoteca")
-                            .font(.largeTitle.bold())
-                            .foregroundStyle(.libraryAccent)
-                        Text("Los juegos que puedes llevar a la mesa.")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 2)
-
-                    summaryCard
-                    }
-                    .padding(.vertical, 4)
-                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
-                    .listRowBackground(Color.clear)
-                }
-
-                Section {
-                    if viewModel.libraryGames.isEmpty {
-                        ContentUnavailableView {
-                            Label("Tu ludoteca está vacía", systemImage: "books.vertical")
-                        } description: {
-                            Text("Añade juegos desde el catálogo para compartir qué puedes llevar a la mesa.")
-                        }
-                        .padding(.vertical, 8)
-                    } else {
-                        ForEach(viewModel.libraryGames) { game in
-                            GameListItemView(
-                                game: game,
-                                trailingSymbol: nil,
-                                onSelect: { path.append(game) },
-                                onDelete: {
-                                    gamePendingDeletion = game
-                                }
-                            )
-                            .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
-                            .listRowBackground(Color.clear)
-                        }
-                    }
-                }
-
-                Section {
-                    Button(action: onExploreGames) {
-                        Label("Añadir juegos", systemImage: "plus")
-                            .font(.subheadline.weight(.medium))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 13)
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(Color.green)
-                    .overlay(Capsule().stroke(Color.green, lineWidth: 1))
-                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
-                    .listRowBackground(Color.clear)
-
-                    ownersPrompt
-                        .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
-                        .listRowBackground(Color.clear)
+            Group {
+                if authViewModel.isAuthenticated {
+                    libraryList
+                } else {
+                    LibraryNoSessionView(onRequestLogin: onRequestLogin)
                 }
             }
-            .listStyle(.plain)
-            .scrollContentBackground(.hidden)
-            .listRowSeparator(.hidden)
             .background(Color(uiColor: .systemGroupedBackground))
             .navigationBarHidden(true)
             .navigationDestination(for: GameCatalogItem.self) { game in
@@ -97,6 +40,75 @@ struct GameLibraryView: View {
                 }
             }
         }
+    }
+
+    private var libraryList: some View {
+        List {
+            Section {
+                VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Mi ludoteca")
+                            .font(.largeTitle.bold())
+                            .foregroundStyle(.libraryAccent)
+                        Text("Los juegos que puedes llevar a la mesa.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 2)
+
+                    summaryCard
+                }
+                .padding(.vertical, 4)
+                .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                .listRowBackground(Color.clear)
+            }
+
+            Section {
+                if viewModel.libraryGames.isEmpty {
+                    ContentUnavailableView {
+                        Label("Tu ludoteca está vacía", systemImage: "books.vertical")
+                    } description: {
+                        Text("Añade juegos desde el catálogo para compartir qué puedes llevar a la mesa.")
+                    }
+                    .padding(.vertical, 8)
+                } else {
+                    ForEach(viewModel.libraryGames) { game in
+                        GameListItemView(
+                            game: game,
+                            trailingSymbol: nil,
+                            onSelect: { path.append(game) },
+                            onDelete: {
+                                gamePendingDeletion = game
+                            }
+                        )
+                        .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                        .listRowBackground(Color.clear)
+                    }
+                }
+            }
+
+            Section {
+                Button(action: onExploreGames) {
+                    Label("Añadir juegos", systemImage: "plus")
+                        .font(.subheadline.weight(.medium))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 13)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(Color.green)
+                .overlay(Capsule().stroke(Color.green, lineWidth: 1))
+                .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                .listRowBackground(Color.clear)
+
+                ownersPrompt
+                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                    .listRowBackground(Color.clear)
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .listRowSeparator(.hidden)
     }
 
     private var deletionAlertIsPresented: Binding<Bool> {
@@ -151,4 +163,10 @@ struct GameLibraryView: View {
 
 #Preview("Mi ludoteca", traits: .gamesSampleData) {
     GameLibraryView()
+}
+
+#Preview("Ludoteca sin sesión") {
+    GameLibraryView()
+        .environment(LibraryVM(libraryGames: GamesSampleData.libraryGames))
+        .environment(AuthVM())
 }

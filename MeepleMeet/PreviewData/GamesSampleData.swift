@@ -80,7 +80,12 @@ struct GamesPreviewModifier: PreviewModifier {
     static func makeSharedContext() async throws -> Context {
         Context(
             games: GamesVM(games: GamesSampleData.games),
-            library: LibraryVM(libraryGames: GamesSampleData.libraryGames)
+            library: LibraryVM(libraryGames: GamesSampleData.libraryGames),
+            auth: AuthVM(user: AuthenticatedUser(
+                id: UUID(),
+                name: "Alex Demo",
+                email: "alex@example.com"
+            ))
         )
     }
 
@@ -88,12 +93,14 @@ struct GamesPreviewModifier: PreviewModifier {
         content
             .environment(context.games)
             .environment(context.library)
+            .environment(context.auth)
     }
 }
 
 struct GamesPreviewContext {
     let games: GamesVM
     let library: LibraryVM
+    let auth: AuthVM
 }
 
 extension PreviewTrait where T == Preview.ViewTraits {

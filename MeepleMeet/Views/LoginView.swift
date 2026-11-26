@@ -236,6 +236,7 @@ struct LoginView: View {
             }
             .padding(.horizontal, 14)
             .frame(height: 52)
+            .textInputAutocapitalization(.never)
             .background(Color(uiColor: .tertiarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)

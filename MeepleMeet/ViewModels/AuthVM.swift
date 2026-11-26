@@ -9,6 +9,10 @@ final class AuthVM {
 
     var isAuthenticated: Bool { user != nil }
 
+    init(user: AuthenticatedUser? = nil) {
+        self.user = user
+    }
+
     func login(email: String, password: String) async {
         guard !isLoading else { return }
         isLoading = true
