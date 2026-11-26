@@ -1,16 +1,45 @@
 import Foundation
+import Mastery26
 import Observation
+
+enum AuthState {
+    case notChecked
+    case checkingSession
+    case restoreError(String)
+    case authenticated(AuthenticatedUser)
+    case notAuthenticated
+}
 
 @Observable @MainActor
 final class AuthVM {
-    private(set) var user: AuthenticatedUser?
+    private(set) var state: AuthState
     private(set) var isLoading = false
     private(set) var errorMessage: String?
 
-    var isAuthenticated: Bool { user != nil }
+    init(state: AuthState = .notChecked) {
+        self.state = state
+    }
 
-    init(user: AuthenticatedUser? = nil) {
-        self.user = user
+    func restoreSession() async {
+        switch state {
+        case .notChecked, .restoreError(_):
+            state = .checkingSession
+        case .checkingSession, .authenticated, .notAuthenticated:
+            return
+        }
+
+        do {
+            if let user = try await Repository().validateJWT() {
+                state = .authenticated(user)
+            } else {
+                state = .notAuthenticated
+            }
+        } catch NetworkError.status(401) {
+            await Repository().clearAuthToken()
+            state = .notAuthenticated
+        } catch {
+            state = .restoreError("No se ha podido comprobar tu sesión. Comprueba tu conexión e inténtalo de nuevo.")
+        }
     }
 
     func login(email: String, password: String) async {
@@ -24,7 +53,7 @@ final class AuthVM {
                 email: email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
                 password: password
             )
-            user = response.user
+            state = .authenticated(response.user)
         } catch {
             errorMessage = "No se pudo iniciar sesión. Comprueba tus datos e inténtalo de nuevo."
         }

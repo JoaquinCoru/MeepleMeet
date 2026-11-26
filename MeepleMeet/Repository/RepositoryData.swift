@@ -25,6 +25,22 @@ struct Repository: RepositoryData {
         let request = RegisterRequest(name: name, email: email, password: password)
         try await getStatus(.request(.post, url: .register, body: request), status: 201)
     }
+
+    func validateJWT() async throws(NetworkError) -> AuthenticatedUser? {
+        guard let authToken,
+              let token = String(data: authToken, encoding: .utf8) else {
+            return nil
+        }
+
+        return try await getJSON(
+            .request(url: .validateJWT, token: token),
+            type: AuthenticatedUser.self
+        )
+    }
+
+    func clearAuthToken() {
+        authToken = nil
+    }
 }
 
 protocol RepositoryData: NetworkInteractor, Sendable {

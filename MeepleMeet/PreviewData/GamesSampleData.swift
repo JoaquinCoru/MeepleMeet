@@ -81,11 +81,11 @@ struct GamesPreviewModifier: PreviewModifier {
         Context(
             games: GamesVM(games: GamesSampleData.games),
             library: LibraryVM(libraryGames: GamesSampleData.libraryGames),
-            auth: AuthVM(user: AuthenticatedUser(
+            auth: AuthVM(state: .authenticated(AuthenticatedUser(
                 id: UUID(),
                 name: "Alex Demo",
                 email: "alex@example.com"
-            ))
+            )))
         )
     }
 

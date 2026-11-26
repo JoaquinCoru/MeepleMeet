@@ -3,6 +3,7 @@ import SwiftUI
 struct RootTabView: View {
     @Environment(GamesVM.self) private var gamesViewModel
     @Environment(LibraryVM.self) private var libraryViewModel
+    @Environment(AuthVM.self) private var authViewModel
     @State private var selectedTab: AppTab = .inicio
 
     var body: some View {
@@ -44,6 +45,9 @@ struct RootTabView: View {
             }
             .tabItem { Label(AppTab.perfil.title, systemImage: AppTab.perfil.symbol) }
             .tag(AppTab.perfil)
+        }
+        .task {
+            await authViewModel.restoreSession()
         }
     }
 }

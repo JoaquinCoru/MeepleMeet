@@ -12,9 +12,16 @@ struct GameLibraryView: View {
     var body: some View {
         NavigationStack(path: $path) {
             Group {
-                if authViewModel.isAuthenticated {
+                switch authViewModel.state {
+                case .notChecked, .checkingSession:
+                    SessionRestoreView()
+                case .restoreError(let errorMessage):
+                    SessionRestoreView(errorMessage: errorMessage) {
+                        Task { await authViewModel.restoreSession() }
+                    }
+                case .authenticated(_):
                     libraryList
-                } else {
+                case .notAuthenticated:
                     LibraryNoSessionView(onRequestLogin: onRequestLogin)
                 }
             }
@@ -168,5 +175,5 @@ struct GameLibraryView: View {
 #Preview("Ludoteca sin sesión") {
     GameLibraryView()
         .environment(LibraryVM(libraryGames: GamesSampleData.libraryGames))
-        .environment(AuthVM())
+        .environment(AuthVM(state: .notAuthenticated))
 }

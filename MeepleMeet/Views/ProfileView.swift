@@ -5,9 +5,16 @@ struct ProfileView: View {
 
     var body: some View {
         Group {
-            if let user = authViewModel.user {
+            switch authViewModel.state {
+            case .notChecked, .checkingSession:
+                SessionRestoreView()
+            case .restoreError(let errorMessage):
+                SessionRestoreView(errorMessage: errorMessage) {
+                    Task { await authViewModel.restoreSession() }
+                }
+            case .authenticated(let user):
                 loggedInProfile(user: user)
-            } else {
+            case .notAuthenticated:
                 LoginView()
             }
         }
@@ -23,6 +30,7 @@ struct ProfileView: View {
 #Preview("Sin sesión") {
     NavigationStack {
         ProfileView()
+            .environment(AuthVM(state: .notAuthenticated))
     }
 }
 
