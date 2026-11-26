@@ -12,6 +12,8 @@ enum AuthState {
 
 @Observable @MainActor
 final class AuthVM {
+    private let installationMarkerKey = "hasCompletedInitialInstallation"
+
     private(set) var state: AuthState
     private(set) var isLoading = false
     private(set) var errorMessage: String?
@@ -26,6 +28,15 @@ final class AuthVM {
             state = .checkingSession
         case .checkingSession, .authenticated, .notAuthenticated:
             return
+        }
+
+        // Keychain items may survive an app uninstall. UserDefaults is removed
+        // with the app, so a missing marker identifies a fresh installation.
+        let defaults = UserDefaults.standard
+        if !defaults.bool(forKey: installationMarkerKey) {
+            var security = Security()
+            await security.clearAuthToken()
+            defaults.set(true, forKey: installationMarkerKey)
         }
 
         let repository = Repository()
