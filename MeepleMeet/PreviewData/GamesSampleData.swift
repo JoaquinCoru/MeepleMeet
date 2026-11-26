@@ -68,19 +68,32 @@ enum GamesSampleData {
             placeholderEmoji: "🚀"
         )
     ]
+
+    static var libraryGames: [GameCatalogItem] {
+       Array(games.prefix(3))
+    }
 }
 
 struct GamesPreviewModifier: PreviewModifier {
-    typealias Context = GamesVM
+    typealias Context = GamesPreviewContext
 
-    static func makeSharedContext() async throws -> GamesVM {
-        GamesVM(games: GamesSampleData.games)
+    static func makeSharedContext() async throws -> Context {
+        Context(
+            games: GamesVM(games: GamesSampleData.games),
+            library: LibraryVM(libraryGames: GamesSampleData.libraryGames)
+        )
     }
 
-    func body(content: Content, context: GamesVM) -> some View {
+    func body(content: Content, context: Context) -> some View {
         content
-            .environment(context)
+            .environment(context.games)
+            .environment(context.library)
     }
+}
+
+struct GamesPreviewContext {
+    let games: GamesVM
+    let library: LibraryVM
 }
 
 extension PreviewTrait where T == Preview.ViewTraits {

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootTabView: View {
     @Environment(GamesVM.self) private var gamesViewModel
+    @Environment(LibraryVM.self) private var libraryViewModel
     @State private var selectedTab: AppTab = .inicio
 
     var body: some View {
@@ -26,7 +27,12 @@ struct RootTabView: View {
             .tag(AppTab.quedadas)
 
             NavigationStack {
-                GameLibraryView()
+                GameLibraryView {
+                    selectedTab = .juegos
+                } onSearchMeetups: {
+                    selectedTab = .quedadas
+                }
+                .environment(libraryViewModel)
             }
             .tabItem { Label(AppTab.ludoteca.title, systemImage: AppTab.ludoteca.symbol) }
             .tag(AppTab.ludoteca)

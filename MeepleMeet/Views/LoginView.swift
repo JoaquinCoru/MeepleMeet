@@ -17,9 +17,6 @@ struct LoginView: View {
     @State private var registrationAlert: RegistrationAlert?
     @FocusState private var focusedField: Field?
 
-    private let accent = Color(red: 0.02, green: 0.59, blue: 0.28)
-    private let sand = Color(red: 0.91, green: 0.86, blue: 0.76)
-
     var body: some View {
         ScrollView {
             VStack(spacing: 28) {
@@ -57,11 +54,11 @@ struct LoginView: View {
         VStack(spacing: 14) {
             ZStack {
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .fill(sand)
+                    .fill(Color.sand)
                     .frame(width: 76, height: 76)
                 Image(systemName: "dice.fill")
                     .font(.system(size: 34, weight: .semibold))
-                    .foregroundStyle(accent)
+                    .foregroundStyle(.accent)
                     .rotationEffect(.degrees(-8))
             }
 
@@ -139,7 +136,7 @@ struct LoginView: View {
                     Spacer()
                     Button("¿Has olvidado tu contraseña?") { showingComingSoon = true }
                         .font(.footnote.weight(.semibold))
-                        .foregroundStyle(accent)
+                        .foregroundStyle(.accent)
                 }
                 .padding(.top, -8)
             }
@@ -179,7 +176,7 @@ struct LoginView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
-                .background(accent, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .background(.accent, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             }
             .buttonStyle(.plain)
             .disabled(authViewModel.isLoading || (isCreatingAccount
@@ -199,7 +196,7 @@ struct LoginView: View {
                     }
                 }
                 .fontWeight(.semibold)
-                .foregroundStyle(accent)
+                .foregroundStyle(.accent)
             }
             .font(.subheadline)
             .frame(maxWidth: .infinity)
@@ -232,7 +229,7 @@ struct LoginView: View {
             HStack(spacing: 11) {
                 Image(systemName: symbol)
                     .font(.subheadline)
-                    .foregroundStyle(accent)
+                    .foregroundStyle(.accent)
                     .frame(width: 19)
                 field()
                     .font(.body)
@@ -250,7 +247,7 @@ struct LoginView: View {
     private var footerNote: some View {
         HStack(alignment: .top, spacing: 9) {
             Image(systemName: "person.3.fill")
-                .foregroundStyle(accent)
+                .foregroundStyle(.accent)
             Text("Organiza partidas, descubre juegos y comparte tu ludoteca con tu comunidad.")
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.leading)

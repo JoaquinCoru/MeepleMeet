@@ -2,8 +2,52 @@ import SwiftUI
 
 struct GameListItemView: View {
     let game: GameCatalogItem
+    var trailingSymbol: String? = "chevron.right"
+    var onSelect: (() -> Void)? = nil
+    var onDelete: (() -> Void)? = nil
 
     var body: some View {
+        HStack(spacing: 12) {
+            if let onSelect {
+                Button(action: onSelect) {
+                    gameInformation
+                }
+                .buttonStyle(.plain)
+            } else {
+                gameInformation
+            }
+
+            Spacer(minLength: 8)
+
+            if let onDelete {
+                Button(action: onDelete) {
+                    Image(systemName: "trash")
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundStyle(.trash)
+                        .frame(width: 36, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Eliminar \(game.title) de mi ludoteca")
+            } else if let trailingSymbol {
+                Image(systemName: trailingSymbol)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(Color.secondary.opacity(0.8))
+                    .accessibilityHidden(true)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(uiColor: .secondarySystemGroupedBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color(uiColor: .separator).opacity(0.35), lineWidth: 1)
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    private var gameInformation: some View {
         HStack(spacing: 12) {
             cover
 
@@ -34,23 +78,9 @@ struct GameListItemView: View {
                         .lineLimit(1)
                 }
             }
-
-            Spacer(minLength: 8)
-
-            Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(Color.secondary.opacity(0.8))
-                .accessibilityHidden(true)
         }
-        .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(uiColor: .secondarySystemGroupedBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color(uiColor: .separator).opacity(0.35), lineWidth: 1)
-        }
-        .accessibilityElement(children: .combine)
+        .contentShape(Rectangle())
     }
 
     @ViewBuilder
@@ -74,7 +104,7 @@ struct GameListItemView: View {
 
     private var coverPlaceholder: some View {
         RoundedRectangle(cornerRadius: 12, style: .continuous)
-            .fill(Color(red: 0.91, green: 0.86, blue: 0.76))
+            .fill(.sand)
             .overlay {
                 Text(game.placeholderEmoji ?? "🎲")
                     .font(.system(size: 29))

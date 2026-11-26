@@ -6,9 +6,6 @@ struct GameDetailView: View {
 
     @State private var isInLibrary = false
 
-    private let accent = Color(red: 0.02, green: 0.59, blue: 0.28)
-    private let sand = Color(red: 0.91, green: 0.86, blue: 0.76)
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
@@ -38,9 +35,9 @@ struct GameDetailView: View {
                         .padding(.vertical, 13)
                 }
                 .buttonStyle(.plain)
-                .foregroundStyle(accent)
-                .background(accent.opacity(0.07), in: Capsule())
-                .overlay(Capsule().stroke(accent.opacity(0.7), lineWidth: 1))
+                .foregroundStyle(.accent)
+                .background(.accent.opacity(0.07), in: Capsule())
+                .overlay(Capsule().stroke(.accent.opacity(0.7), lineWidth: 1))
 
                 if let rulesURL = game.rulesURL {
                     Link(destination: rulesURL) {
@@ -51,7 +48,7 @@ struct GameDetailView: View {
                                 .font(.footnote)
                         }
                         .font(.subheadline.weight(.medium))
-                        .foregroundStyle(accent)
+                        .foregroundStyle(.accent)
                         .padding(.horizontal, 2)
                     }
                 }
@@ -81,7 +78,7 @@ struct GameDetailView: View {
                         .font(.caption.weight(.medium))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
-                        .background(.white.opacity(0.65), in: Capsule())
+                        .background(.sand.opacity(0.65), in: Capsule())
                 }
 
                 if let playersLabel = game.playersLabel {
@@ -98,7 +95,7 @@ struct GameDetailView: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, minHeight: 158, alignment: .leading)
-        .background(sand, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(Color.sand, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
 
     @ViewBuilder
@@ -114,7 +111,7 @@ struct GameDetailView: View {
                     imagePlaceholder
                 } else {
                     ProgressView()
-                        .tint(accent)
+                        .tint(.accent)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -128,7 +125,7 @@ struct GameDetailView: View {
 
     private var imagePlaceholder: some View {
         RoundedRectangle(cornerRadius: 15, style: .continuous)
-            .fill(.white.opacity(0.55))
+            .fill(Color.white.opacity(0.55))
             .overlay {
                 Text(game.placeholderEmoji ?? "🎲")
                     .font(.system(size: 40))
@@ -146,7 +143,7 @@ struct GameDetailView: View {
         VStack(alignment: .leading, spacing: 7) {
             Image(systemName: symbol)
                 .font(.subheadline)
-                .foregroundStyle(accent)
+                .foregroundStyle(.accent)
             Text(title)
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -174,9 +171,9 @@ struct GameDetailView: View {
             .font(.subheadline.weight(.semibold))
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
-            .foregroundStyle(isInLibrary ? .white : accent)
-            .background(isInLibrary ? accent : accent.opacity(0.08), in: Capsule())
-            .overlay(Capsule().stroke(accent, lineWidth: isInLibrary ? 0 : 1))
+            .foregroundStyle(isInLibrary ? .white : .accent)
+            .background(isInLibrary ? .accent : .accent.opacity(0.08), in: Capsule())
+            .overlay(Capsule().stroke(.accent, lineWidth: isInLibrary ? 0 : 1))
         }
         .buttonStyle(.plain)
         .accessibilityHint(isInLibrary ? "Quita el juego de tu ludoteca" : "Añade el juego a tu ludoteca")
