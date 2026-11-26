@@ -28,13 +28,16 @@ final class AuthVM {
             return
         }
 
+        let repository = Repository()
+        guard let jwt = await repository.jwt else {
+            state = .notAuthenticated
+            return
+        }
+
         var security = Security()
         do {
-            if let user = try await security.validateJWT() {
-                state = .authenticated(user)
-            } else {
-                state = .notAuthenticated
-            }
+            let user = try await security.getUser(jwt: jwt)
+            state = .authenticated(user)
         } catch NetworkError.status(401) {
             await security.clearAuthToken()
             state = .notAuthenticated

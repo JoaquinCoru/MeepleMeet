@@ -8,13 +8,17 @@ extension URL {
     static let getGames = api
         .appending(path: "games")
 
+    /// GET /api/v1/collection
+    static let getCollection = api
+        .appending(path: "collection")
+
     /// POST /api/v1/auth/login
     static let login = api
         .appending(path: "auth")
         .appending(path: "login")
 
     /// GET /api/v1/auth/me
-    static let validateJWT = api
+    static let getUser = api
         .appending(path: "auth")
         .appending(path: "me")
 

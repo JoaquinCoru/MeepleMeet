@@ -72,15 +72,31 @@ struct GameLibraryView: View {
             }
 
             Section {
-                if viewModel.libraryGames.isEmpty {
+                switch viewModel.state {
+                case .idle, .loading:
+                    ProgressView("Cargando tu ludoteca…")
+                        .frame(maxWidth: .infinity)
+                        .listRowBackground(Color.clear)
+                case .failed(let errorMessage):
+                    ContentUnavailableView {
+                        Label("No se pudo cargar la ludoteca", systemImage: "wifi.exclamationmark")
+                    } description: {
+                        Text(errorMessage)
+                    } actions: {
+                        Button("Reintentar") {
+                            Task { await viewModel.loadLibraryGames() }
+                        }
+                    }
+                    .listRowBackground(Color.clear)
+                case .loaded(let games) where games.isEmpty:
                     ContentUnavailableView {
                         Label("Tu ludoteca está vacía", systemImage: "books.vertical")
                     } description: {
                         Text("Añade juegos desde el catálogo para compartir qué puedes llevar a la mesa.")
                     }
                     .padding(.vertical, 8)
-                } else {
-                    ForEach(viewModel.libraryGames) { game in
+                case .loaded(let games):
+                    ForEach(games) { game in
                         GameListItemView(
                             game: game,
                             trailingSymbol: nil,
@@ -116,6 +132,9 @@ struct GameLibraryView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .listRowSeparator(.hidden)
+        .task {
+            await viewModel.loadLibraryGames()
+        }
     }
 
     private var deletionAlertIsPresented: Binding<Bool> {
@@ -131,7 +150,7 @@ struct GameLibraryView: View {
         VStack(alignment: .leading, spacing: 10) {
             Image(systemName: "books.vertical")
                 .font(.system(size: 18, weight: .medium))
-            Text("\(viewModel.libraryGames.count) \(viewModel.libraryGames.count == 1 ? "juego" : "juegos")")
+            Text("\(libraryGameCount) \(libraryGameCount == 1 ? "juego" : "juegos")")
                 .font(.title3.bold())
             Text("Tu colección personal")
                 .font(.footnote)
@@ -141,6 +160,11 @@ struct GameLibraryView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .background(.libraryAccent, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+    }
+
+    private var libraryGameCount: Int {
+        guard case .loaded(let games) = viewModel.state else { return 0 }
+        return games.count
     }
 
     private var ownersPrompt: some View {

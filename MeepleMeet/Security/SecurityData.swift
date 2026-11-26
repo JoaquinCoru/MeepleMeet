@@ -19,11 +19,19 @@ protocol SecurityData: NetworkInteractor, Sendable {
 
     mutating func login(email: String, password: String) async throws -> LoginResponse
     func register(name: String, email: String, password: String) async throws
-    func validateJWT() async throws(NetworkError) -> AuthenticatedUser?
+    mutating func validateJWT(jwt: String) async throws
+    func getUser(jwt: String) async throws -> AuthenticatedUser
     mutating func clearAuthToken()
 }
 
 extension SecurityData {
+    var validator: JWT<AppPayload> {
+        JWT(
+            pemURL: Bundle.main.url(forResource: "meeplemeet_ecdsa-public", withExtension: "pem"),
+            payloadType: AppPayload.self
+        )
+    }
+
     mutating func login(email: String, password: String) async throws -> LoginResponse {
         let credentials = Data("\(email):\(password)".utf8).base64EncodedString()
         let response = try await getJSON(
@@ -39,14 +47,24 @@ extension SecurityData {
         try await getStatus(.request(.post, url: .register, body: request), status: 201)
     }
 
-    func validateJWT() async throws(NetworkError) -> AuthenticatedUser? {
-        guard let authToken,
-              let token = String(data: authToken, encoding: .utf8) else {
-            return nil
+    mutating func validateJWT(jwt: String) async throws {
+        do {
+            let payload = try await validator.validateJWT(jwt: jwt)
+            guard payload.expiration > Date() else {
+                throw JWTError.tokenExpired
+            }
+            guard payload.issuer == "MeepleMeetAPI" else {
+                throw JWTError.invalidSignature
+            }
+        } catch JWTError.tokenExpired {
+            clearAuthToken()
+            throw JWTError.tokenExpired
         }
+    }
 
-        return try await getJSON(
-            .request(url: .validateJWT, token: token),
+    func getUser(jwt: String) async throws -> AuthenticatedUser {
+        try await getJSON(
+            .request(url: .getUser, token: jwt),
             type: AuthenticatedUser.self
         )
     }

@@ -2,31 +2,28 @@ import Observation
 
 @Observable @MainActor
 final class GamesVM {
-    private(set) var games: [GameCatalogItem]
-    private(set) var isLoading = false
-    private(set) var errorMessage: String?
+    private(set) var state: DataState<[GameCatalogItem]>
 
-    private var hasLoaded: Bool
-
-    init(games: [GameCatalogItem] = []) {
-        self.games = games
-        hasLoaded = !games.isEmpty
+    init(games: [GameCatalogItem]? = nil) {
+        if let games {
+            state = .loaded(games)
+        } else {
+            state = .idle
+        }
     }
 
     func loadGames() async {
-        guard !hasLoaded, !isLoading else { return }
-
-        isLoading = true
-        errorMessage = nil
-        defer { isLoading = false }
+        switch state {
+        case .idle, .failed(_):
+            state = .loading
+        case .loading, .loaded(_):
+            return
+        }
 
         do {
-            games = try await Repository().getGames()
-            hasLoaded = true
+            state = .loaded(try await Repository().getGames())
         } catch {
-            if !Task.isCancelled {
-                errorMessage = error.localizedDescription
-            }
+            state = Task.isCancelled ? .idle : .failed(error.localizedDescription)
         }
     }
 }
