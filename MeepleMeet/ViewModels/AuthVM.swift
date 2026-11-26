@@ -28,14 +28,15 @@ final class AuthVM {
             return
         }
 
+        var security = Security()
         do {
-            if let user = try await Repository().validateJWT() {
+            if let user = try await security.validateJWT() {
                 state = .authenticated(user)
             } else {
                 state = .notAuthenticated
             }
         } catch NetworkError.status(401) {
-            await Repository().clearAuthToken()
+            await security.clearAuthToken()
             state = .notAuthenticated
         } catch {
             state = .restoreError("No se ha podido comprobar tu sesión. Comprueba tu conexión e inténtalo de nuevo.")
@@ -48,8 +49,9 @@ final class AuthVM {
         errorMessage = nil
         defer { isLoading = false }
 
+        var security = Security()
         do {
-            let response = try await Repository().login(
+            let response = try await security.login(
                 email: email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
                 password: password
             )
@@ -65,7 +67,7 @@ final class AuthVM {
         defer { isLoading = false }
 
         do {
-            try await Repository().register(
+            try await Security().register(
                 name: name.trimmingCharacters(in: .whitespacesAndNewlines),
                 email: email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
                 password: password
