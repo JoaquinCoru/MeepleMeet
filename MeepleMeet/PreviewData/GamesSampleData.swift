@@ -1,5 +1,18 @@
 import Foundation
 import SwiftUI
+import Mastery26
+
+@APIActor
+private struct PreviewLibraryRepository: LibraryRepository {
+    nonisolated init() {}
+
+    func getCollection() async throws -> [GameCatalogItem] {
+        GamesSampleData.libraryGames
+    }
+
+    func addToCollection(gameID: UUID) async throws {}
+    func removeFromCollection(gameID: UUID) async throws {}
+}
 
 enum GamesSampleData {
     static let games: [GameCatalogItem] = [
@@ -80,7 +93,10 @@ struct GamesPreviewModifier: PreviewModifier {
     static func makeSharedContext() async throws -> Context {
         Context(
             games: GamesVM(games: GamesSampleData.games),
-            library: LibraryVM(libraryGames: GamesSampleData.libraryGames),
+            library: LibraryVM(
+                libraryGames: GamesSampleData.libraryGames,
+                repository: PreviewLibraryRepository()
+            ),
             auth: AuthVM(state: .authenticated(AuthenticatedUser(
                 id: UUID(),
                 name: "Alex Demo",

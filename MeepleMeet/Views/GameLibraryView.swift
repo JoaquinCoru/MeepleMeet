@@ -8,6 +8,7 @@ struct GameLibraryView: View {
     @Environment(LibraryVM.self) private var viewModel
     @State private var path: [GameCatalogItem] = []
     @State private var gamePendingDeletion: GameCatalogItem?
+    @State private var deletionError: String?
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -34,19 +35,29 @@ struct GameLibraryView: View {
                     onRequestLogin: onRequestLogin
                 )
             }
-            .alert("¿Eliminar juego?", isPresented: deletionAlertIsPresented) {
-                Button("Cancelar", role: .cancel) {
-                    gamePendingDeletion = nil
-                }
-                Button("Eliminar", role: .destructive) {
-                    guard let gamePendingDeletion else { return }
-                    withAnimation {
-                        viewModel.removeFromLibrary(gamePendingDeletion)
+            .alert(deletionError == nil ? "¿Eliminar juego?" : "No se pudo eliminar", isPresented: deletionAlertIsPresented) {
+                if deletionError != nil {
+                    Button("Aceptar", role: .cancel) { deletionError = nil }
+                } else {
+                    Button("Cancelar", role: .cancel) {
+                        gamePendingDeletion = nil
                     }
-                    self.gamePendingDeletion = nil
+                    Button("Eliminar", role: .destructive) {
+                        guard let game = gamePendingDeletion else { return }
+                        self.gamePendingDeletion = nil
+                        Task {
+                            do {
+                                try await viewModel.removeFromLibrary(game)
+                            } catch {
+                                deletionError = error.localizedDescription
+                            }
+                        }
+                    }
                 }
             } message: {
-                if let gamePendingDeletion {
+                if let deletionError {
+                    Text(deletionError)
+                } else if let gamePendingDeletion {
                     Text("¿Quieres quitar «\(gamePendingDeletion.title)» de tu ludoteca?")
                 }
             }
@@ -143,9 +154,12 @@ struct GameLibraryView: View {
 
     private var deletionAlertIsPresented: Binding<Bool> {
         Binding(
-            get: { gamePendingDeletion != nil },
+            get: { gamePendingDeletion != nil || deletionError != nil },
             set: { isPresented in
-                if !isPresented { gamePendingDeletion = nil }
+                if !isPresented {
+                    gamePendingDeletion = nil
+                    deletionError = nil
+                }
             }
         )
     }

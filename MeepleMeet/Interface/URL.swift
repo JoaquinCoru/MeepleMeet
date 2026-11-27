@@ -19,6 +19,13 @@ extension URL {
             .appending(path: gameID.uuidString)
     }
 
+    /// DELETE /api/v1/collection/:gameID
+    static func removeFromCollection(gameID: UUID) -> URL {
+        api
+            .appending(path: "collection")
+            .appending(path: gameID.uuidString)
+    }
+
     /// POST /api/v1/auth/login
     static let login = api
         .appending(path: "auth")
