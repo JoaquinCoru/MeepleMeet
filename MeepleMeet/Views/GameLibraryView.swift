@@ -7,8 +7,6 @@ struct GameLibraryView: View {
     @Environment(AuthVM.self) private var authViewModel
     @Environment(LibraryVM.self) private var viewModel
     @State private var path: [GameCatalogItem] = []
-    @State private var gamePendingDeletion: GameCatalogItem?
-    @State private var deletionError: String?
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -35,33 +33,8 @@ struct GameLibraryView: View {
                     onRequestLogin: onRequestLogin
                 )
             }
-            .alert(deletionError == nil ? "¿Eliminar juego?" : "No se pudo eliminar", isPresented: deletionAlertIsPresented) {
-                if deletionError != nil {
-                    Button("Aceptar", role: .cancel) { deletionError = nil }
-                } else {
-                    Button("Cancelar", role: .cancel) {
-                        gamePendingDeletion = nil
-                    }
-                    Button("Eliminar", role: .destructive) {
-                        guard let game = gamePendingDeletion else { return }
-                        self.gamePendingDeletion = nil
-                        Task {
-                            do {
-                                try await viewModel.removeFromLibrary(game)
-                            } catch {
-                                deletionError = error.localizedDescription
-                            }
-                        }
-                    }
-                }
-            } message: {
-                if let deletionError {
-                    Text(deletionError)
-                } else if let gamePendingDeletion {
-                    Text("¿Quieres quitar «\(gamePendingDeletion.title)» de tu ludoteca?")
-                }
-            }
         }
+        .modifier(LibraryActionDialogs())
     }
 
     private var libraryList: some View {
@@ -117,7 +90,7 @@ struct GameLibraryView: View {
                             trailingSymbol: nil,
                             onSelect: { path.append(game) },
                             onDelete: {
-                                gamePendingDeletion = game
+                                viewModel.requestRemovalConfirmation(for: game)
                             }
                         )
                         .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
@@ -150,18 +123,6 @@ struct GameLibraryView: View {
         .task {
             await viewModel.loadLibraryGames()
         }
-    }
-
-    private var deletionAlertIsPresented: Binding<Bool> {
-        Binding(
-            get: { gamePendingDeletion != nil || deletionError != nil },
-            set: { isPresented in
-                if !isPresented {
-                    gamePendingDeletion = nil
-                    deletionError = nil
-                }
-            }
-        )
     }
 
     private var summaryCard: some View {

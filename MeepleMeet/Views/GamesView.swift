@@ -51,6 +51,7 @@ struct GamesView: View {
                 )
             }
         }
+        .modifier(LibraryActionDialogs())
         .task {
             await viewModel.loadGames()
         }

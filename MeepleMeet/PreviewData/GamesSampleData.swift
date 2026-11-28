@@ -1,4 +1,5 @@
 import Foundation
+import Mastery26
 import SwiftUI
 import Mastery26
 
@@ -91,17 +92,18 @@ struct GamesPreviewModifier: PreviewModifier {
     typealias Context = GamesPreviewContext
 
     static func makeSharedContext() async throws -> Context {
-        Context(
+        let auth = AuthVM(state: .authenticated(AuthenticatedUser(
+            id: UUID(),
+            name: "Alex Demo",
+            email: "alex@example.com"
+        )))
+        return Context(
             games: GamesVM(games: GamesSampleData.games),
             library: LibraryVM(
                 libraryGames: GamesSampleData.libraryGames,
                 repository: PreviewLibraryRepository()
             ),
-            auth: AuthVM(state: .authenticated(AuthenticatedUser(
-                id: UUID(),
-                name: "Alex Demo",
-                email: "alex@example.com"
-            )))
+            auth: auth
         )
     }
 

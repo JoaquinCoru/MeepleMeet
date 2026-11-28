@@ -1,5 +1,4 @@
 import SwiftUI
-import Mastery26
 
 struct GameDetailView: View {
     let game: GameCatalogItem
@@ -8,15 +7,6 @@ struct GameDetailView: View {
 
     @Environment(AuthVM.self) private var authViewModel
     @Environment(LibraryVM.self) private var libraryViewModel
-    @State private var addState: AddToLibraryState = .idle
-
-    private enum AddToLibraryState {
-        case idle
-        case adding
-        case added
-        case alreadyInLibrary
-        case failed(String)
-    }
 
     var body: some View {
         ScrollView {
@@ -171,22 +161,34 @@ struct GameDetailView: View {
     }
 
     private var libraryButton: some View {
-        VStack(spacing: 8) {
+        let buttonState = libraryViewModel.buttonState(for: game.id)
+
+        return VStack(spacing: 8) {
             Button {
                 guard hasAuthenticatedSession else {
                     onRequestLogin()
                     return
                 }
-                Task { await addGameToLibrary() }
+                Task {
+                    let result = await libraryViewModel.performLibraryAction(for: game)
+                    if result == .sessionExpired {
+                        await authViewModel.invalidateSession()
+                    }
+                }
             } label: {
                 Group {
-                    if isAdding {
+                    if buttonState == .adding {
                         HStack(spacing: 9) {
                             ProgressView().tint(.white)
                             Text("Añadiendo…")
                         }
-                    } else if isInLibrary {
-                        Label("En mi ludoteca", systemImage: "checkmark")
+                    } else if buttonState == .removing {
+                        HStack(spacing: 9) {
+                            ProgressView().tint(.white)
+                            Text("Quitando…")
+                        }
+                    } else if buttonState == .inLibrary {
+                        Label("Quitar de mi ludoteca", systemImage: "minus")
                     } else if hasAuthenticatedSession {
                         Label("Añadir a mi ludoteca", systemImage: "plus")
                     } else {
@@ -196,62 +198,19 @@ struct GameDetailView: View {
                 .font(.subheadline.weight(.semibold))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .foregroundStyle(isInLibrary || isAdding ? .white : .accent)
-                .background(isInLibrary || isAdding ? .accent : .accent.opacity(0.08), in: Capsule())
-                .overlay(Capsule().stroke(.accent, lineWidth: isInLibrary || isAdding ? 0 : 1))
+                .foregroundStyle(buttonState.isEmphasized ? .white : .accent)
+                .background(buttonState.isEmphasized ? .accent : .accent.opacity(0.08), in: Capsule())
+                .overlay(Capsule().stroke(.accent, lineWidth: buttonState.isEmphasized ? 0 : 1))
             }
             .buttonStyle(.plain)
-            .disabled(isAdding || (hasAuthenticatedSession && isInLibrary))
-            .accessibilityHint(isInLibrary ? "Este juego ya está en tu ludoteca" : "Añade el juego a tu ludoteca")
-
-            if case .failed(let message) = addState {
-                Text(message)
-                    .font(.footnote)
-                    .foregroundStyle(.red)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            .disabled(!libraryViewModel.canStartAction)
+            .accessibilityHint(buttonState == .inLibrary ? "Quita este juego de tu ludoteca" : "Añade el juego a tu ludoteca")
         }
     }
 
     private var hasAuthenticatedSession: Bool {
         if case .authenticated(_) = authViewModel.state { return true }
         return false
-    }
-
-    private var isAdding: Bool {
-        if case .adding = addState { return true }
-        return false
-    }
-
-    private var isInLibrary: Bool {
-        if case .loaded(let games) = libraryViewModel.state,
-           games.contains(where: { $0.id == game.id }) {
-            return true
-        }
-
-        switch addState {
-        case .added, .alreadyInLibrary:
-            return true
-        case .idle, .adding, .failed(_):
-            return false
-        }
-    }
-
-    @MainActor
-    private func addGameToLibrary() async {
-        addState = .adding
-        do {
-            try await libraryViewModel.addToLibrary(game)
-            addState = .added
-        } catch NetworkError.status(409) {
-            libraryViewModel.markAsInLibrary(game)
-            addState = .alreadyInLibrary
-        } catch NetworkError.status(401) {
-            addState = .idle
-            await authViewModel.invalidateSession()
-        } catch {
-            addState = .failed("No se pudo añadir el juego. Inténtalo de nuevo.")
-        }
     }
 
     private var ownersCard: some View {
@@ -284,4 +243,5 @@ struct GameDetailView: View {
     NavigationStack {
         GameDetailView(game: GamesSampleData.games[0])
     }
+    .modifier(LibraryActionDialogs())
 }
